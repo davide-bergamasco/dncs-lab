@@ -117,4 +117,49 @@ The assignment deliverable consists of a Github repository containing:
 
 
 # Design
-[ Your work goes here ]
+
+Here you can see the basic network topology of the virtual lab. A more detalied version of this topology is also avaiable on this repository (check out the 'Network-Topology.png' file).
+
+```
+
+        +-----------------------------------------------------+
+        |                                                     |
+        |                                                     |enp0s3
+        +--+--+                +------------+             +------------+
+        |     |                |            |             |            |
+        |     |          enp0s3|            |enp0s9 enp0s8|            |
+        |     +----------------+  router-1  +-------------+  router-2  |
+        |     |                |            |             |            |
+        |     |                |            |             |            |
+        |  M  |                +------------+             +------------+
+        |  A  |                      |enp0s8                     |enp0s9
+        |  N  |                      |                           |
+        |  A  |                      |                           |enp0s8
+        |  G  |                      |                     +-----+----+
+        |  E  |                      |enp0s8               |          |
+        |  M  |            +-------------------+           |          |
+        |  E  |            |                   |           |  host-c  |
+        |  N  +------------+      SWITCH       |           |          |
+        |  T  |            |                   |           |          |
+        |     |            +-------------------+           +----------+
+        |  V  |               |enp0s9       |enp0s10             |enp0s3
+        |  A  |               |             |                    |
+        |  G  |               |             |                    |
+        |  R  |               |enp0s8       |enp0s8              |
+        |  A  |        +----------+     +----------+             |
+        |  N  |        |          |     |          |             |
+        |  T  |  enp0s3|          |     |          |             |
+        |     +--------+  host-a  |     |  host-b  |             |
+        |     |        |          |     |          |             |
+        |     |        |          |     |          |             |
+        ++-+--+        +----------+     +----------+             |
+        | |                              |enp0s3                 |
+        | |                              |                       |
+        | +------------------------------+                       |
+        |                                                        |
+        |                                                        |
+        +--------------------------------------------------------+
+
+
+
+```
