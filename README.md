@@ -418,9 +418,6 @@ ovs-vsctl add-br mybridge
 ovs-vsctl add-port mybridge enp0s8
 ovs-vsctl add-port mybridge enp0s9 tag=10
 ovs-vsctl add-port mybridge enp0s10 tag=20
-
-
-
 ```
 
 ### router-1
