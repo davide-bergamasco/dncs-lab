@@ -235,4 +235,6 @@ For all the other networks this issue does not occur.
 
 ## Virtual machine configuration
 
-Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script `$machinename.sh`
+Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script called `$machinename.sh`
+
+### host-a
