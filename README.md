@@ -271,3 +271,251 @@ sudo ip route add 192.168.100.0/30 via 192.168.10.1 dev enp0s8 #rotta per "broad
 sudo ip route add 192.168.20.0/23 via 192.168.10.1 dev enp0s8 #rotta per "broadcast_host_b"
 sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "broadcast_router-south-2"
 ```
+
+### host-b
+
+- `Vagrantfile`
+
+```
+# hostb:
+  config.vm.define "host-b" do |hostb|
+    hostb.vm.box = "ubuntu/bionic64"
+    hostb.vm.hostname = "host-b"
+    hostb.vm.provision "shell", path: "hostb.sh"
+
+    # enp0s8
+    hostb.vm.network "private_network",
+    virtualbox__intnet: "broadcast_host_b",
+    ip: "192.168.20.2",
+    mask: "255.255.254.0"
+
+    hostb.vm.provider "virtualbox" do |vb|
+      vb.memory = 256
+    end
+  end
+```
+
+- `hostb.sh`
+
+```
+export DEBIAN_FRONTEND=noninteractive
+
+
+echo "hostb.sh script" > hostb
+
+sudo ip route add 192.168.100.0/30 via 192.168.20.1 dev enp0s8 #rotta per "broadcast_router-inter"
+sudo ip route add 192.168.10.0/26 via 192.168.20.1 dev enp0s8 #rotta per "broadcast_host_a"
+sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "broadcast_router-south-2"
+
+```
+
+### host-c
+
+- `Vagrantfile`
+
+```
+# hostc:
+  config.vm.define "host-c" do |hostc|
+    hostc.vm.box = "ubuntu/bionic64"
+    hostc.vm.hostname = "host-c"
+    hostc.vm.provision "shell", path: "hostc.sh"
+
+    # enp0s8
+    hostc.vm.network "private_network",
+    virtualbox__intnet: "broadcast_router-south-2",
+    ip: "192.168.30.2",
+    mask: "255.255.255.0"
+
+    hostc.vm.provider "virtualbox" do |vb|
+      vb.memory = 1000
+    end
+  end
+```
+
+- `hostc.sh`
+
+```
+export DEBIAN_FRONTEND=noninteractive
+
+
+echo "hostc.sh script" > hostc
+
+sudo ip route add 192.168.100.0/30 via 192.168.30.1 dev enp0s8 #rotta per rete "broadcast_router-inter"
+sudo ip route add 192.168.10.0/26 via 192.168.30.1 dev enp0s8 #rotta per rete "broadcast_host_a"
+sudo ip route add 192.168.20.0/23 via 192.168.30.1 dev enp0s8 #rotta per rete "broadcast_host_b"
+
+#web server configuration
+
+apt-get update
+apt-get install -y docker.io
+apt-get install -y traceroute
+
+echo "<h1>This is the WebServer home page</h1>
+<h3>This page is hosted on host-c</h3>" > index.html
+
+echo "
+FROM nginx:latest
+MAINTAINER Davide
+ADD ./index.html /usr/share/nginx/html/index.html
+EXPOSE 80
+"> Dockerfile
+
+# sudo docker build -t my_dncs_webserver .
+# sudo docker run -d -p 80:80 my_dncs_webserver
+sudo docker pull dustnic82/nginx-test
+sudo docker run -d -p 80:80 dustnic82/nginx-test
+```
+
+### switch
+
+- `Vagrantfile`
+
+```
+# switch:
+config.vm.define "switch" do |switch|
+  switch.vm.box = "ubuntu/bionic64"
+  switch.vm.hostname = "switch"
+  switch.vm.provision "shell", path: "switch.sh"
+
+  #enp0s8
+  switch.vm.network "private_network",
+  virtualbox__intnet: "broadcast_router-south-1",
+  auto_config: false
+
+  #enp0s9
+  switch.vm.network "private_network",
+  virtualbox__intnet: "broadcast_host_a",
+  auto_config: false
+
+  #enp0s10
+  switch.vm.network "private_network",
+  virtualbox__intnet: "broadcast_host_b",
+  auto_config: false
+
+  switch.vm.provider "virtualbox" do |vb|
+    vb.memory = 500
+  end
+end
+```
+
+- `switch.sh`
+
+```
+export DEBIAN_FRONTEND=noninteractive
+
+
+echo "switch.sh script" > switch
+
+apt-get update
+apt-get install -y tcpdump
+apt-get install -y openvswitch-common openvswitch-switch apt-transport-https ca-certificates curl software-properties-common
+
+ip link set enp0s8 up
+ip link set enp0s9 up
+ip link set enp0s10 up
+
+ovs-vsctl add-br mybridge
+ovs-vsctl add-port mybridge enp0s8
+ovs-vsctl add-port mybridge enp0s9 tag=10
+ovs-vsctl add-port mybridge enp0s10 tag=20
+
+
+
+```
+
+### router-1
+
+- `Vagrantfile`
+
+```
+#router1:
+config.vm.define "router-1" do |router1|
+  router1.vm.box = "ubuntu/bionic64"
+  router1.vm.hostname = "router-1"
+  router1.vm.provision "shell", path: "router1.sh"
+
+  #enp0s8
+  router1.vm.network "private_network",
+  virtualbox__intnet: "broadcast_router-south-1",
+  auto_config: false
+
+  #enp0s9
+  router1.vm.network "private_network",
+  virtualbox__intnet: "broadcast_router-inter",
+  ip: "192.168.100.1",
+  mask: "255.255.255.252" #/30
+
+  router1.vm.provider "virtualbox" do |vb|
+    vb.memory = 500
+  end
+end
+```
+
+- `router1.sh`
+
+```
+export DEBIAN_FRONTEND=noninteractive
+
+
+echo "router1.sh script" > router1
+
+sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+
+ip link set enp0s8 up
+
+ip link add link enp0s8 name enp0s8.10 type vlan id 10
+ip link add link enp0s8 name enp0s8.20 type vlan id 20
+
+ip addr add 192.168.10.1/26 brd 192.168.10.63 dev enp0s8.10
+ip addr add 192.168.20.1/23 brd 192.168.21.255 dev enp0s8.20
+
+ip link set dev enp0s8.10 up
+ip link set dev enp0s8.20 up
+
+sudo ip route add 192.168.30.0/24 via 192.168.100.2 dev enp0s9 #rotta per rete "broadcast_router-south-2"
+
+```
+
+### router-2
+
+- `Vagrantfile`
+
+```
+#router2:
+config.vm.define "router-2" do |router2|
+  router2.vm.box = "ubuntu/bionic64"
+  router2.vm.hostname = "router-2"
+  router2.vm.provision "shell", path: "router2.sh"
+
+  #enp0s8
+  router2.vm.network "private_network",
+  virtualbox__intnet: "broadcast_router-inter",
+  ip: "192.168.100.2",
+  mask: "255.255.255.252"
+
+  #enp0s9
+  router2.vm.network "private_network",
+  virtualbox__intnet: "broadcast_router-south-2",
+  ip: "192.168.30.1",
+  mask: "255.255.255.0"
+
+  router2.vm.provider "virtualbox" do |vb|
+    vb.memory = 500
+  end
+end
+```
+
+- `router2.sh`
+
+```
+export DEBIAN_FRONTEND=noninteractive
+
+
+echo "router2.sh script" > router2
+
+sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+
+sudo ip route add 192.168.10.0/26 via 192.168.100.1 dev enp0s8 #rotta per "broadcast_host_a"
+sudo ip route add 192.168.20.0/23 via 192.168.100.1 dev enp0s8 #rotta per "broadcast_host_b"
+
+```
