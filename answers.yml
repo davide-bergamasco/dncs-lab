@@ -1,0 +1,62 @@
+FirstName: Davide
+LastName: Bergamasco
+MatriculationNumber: 202218
+AcademicYear: 2020-2021
+GitHubUrl: YourGithubRepositoryURL
+Subnets:
+  HostsA:
+    RequiredAddresses: 62
+    SubnetAddress: 192.168.10.0
+    SubnetPrefixLength: 255.255.255.128
+  HostsB:
+    RequiredAddresses: 362
+    SubnetAddress: 192.168.20.0
+    SubnetPrefixLength: 255.255.254.0
+  Hub:
+    RequiredAddresses: 143
+    SubnetAddress: 192.168.30.1
+    SubnetPrefixLength: 255.255.255.0
+
+
+Subnet-A : 192.168.10.0/25
+
+  SubnetAddress: 192.168.10.0
+  SubnetPrefixLength: 255.255.255.128
+  CIDR Notation: /25
+  RequiredAddresses: 62
+  Number of Usable Hosts:	126
+  Usable Host IP Range: (192.168.10.1 - 192.168.10.126)
+  Broadcast Address: 192.168.10.127
+
+
+Subnet-B : 192.168.20.0/23
+
+  SubnetAddress: 192.168.20.0
+  SubnetPrefixLength: 255.255.254.0
+  CIDR Notation: /23
+  RequiredAddresses: 362
+  Number of Usable Hosts:	510
+  Usable Host IP Range: (192.168.20.1 - 192.168.21.254)
+  Broadcast Address: 192.168.21.255
+
+
+Subnet-C : 192.168.30.0/24
+
+  SubnetAddress: 192.168.30.0
+  SubnetPrefixLength: 255.255.255.0
+  CIDR Notation: /24
+  RequiredAddresses: 143
+  Number of Usable Hosts:	254
+  Usable Host IP Range: (192.168.20.1 - 192.168.21.254)
+  Broadcast Address: 192.168.21.255
+
+
+Subnet-D : 192.168.100.0/30
+
+  SubnetAddress: 192.168.100.0
+  SubnetPrefixLength: 255.255.255.0
+  CIDR Notation: /30
+  RequiredAddresses: //
+  Number of Usable Hosts:	2
+  Usable Host IP Range: (192.168.100.1 - 192.168.100.2)
+  Broadcast Address: 192.168.100.3
