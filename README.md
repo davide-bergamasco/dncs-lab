@@ -118,7 +118,7 @@ The assignment deliverable consists of a Github repository containing:
 
 # Design
 
-Here you can see the basic network topology of the virtual lab. A more detalied version of this topology is also avaiable on this repository (check out the 'Network-Topology.png' file).
+Here you can see the basic network topology of the virtual lab. A more detalied version of this topology is also avaiable on this repository (check out the `Network-Topology.png` file).
 
 ```
 
