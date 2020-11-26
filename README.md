@@ -231,3 +231,8 @@ Each of these subnets contains different hosts and different router's network in
 
 In the case of `Subnet-A` it was also possible to use a /26 (255.255.255.192) netmask , which has 62 usable addresses as required. Instead of the /26 I preferred to choose a /25 (255.255.255.127) netmask which as more free addresses. This because one of the address must be used for the router's network interface, so with the /26 netmask only 61 IP addresses were free to use meanwhile with the /25 we still have 125 free IP addresses.
 For all the other networks this issue does not occur.
+
+
+## Virtual machine configuration
+
+Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script `$machinename.sh`
