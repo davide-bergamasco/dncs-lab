@@ -324,6 +324,9 @@ sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "Subnet
 
 ### host-c
 
+The network configuration of this machine very similar to the configuration of `host-a` and `host-b`.
+
+
 - `Vagrantfile`
 
 ```
@@ -359,11 +362,17 @@ sudo ip route add 192.168.20.0/23 via 192.168.30.1 dev enp0s8 #rotta per rete "S
 
 apt-get update
 apt-get install -y docker.io
-apt-get install -y traceroute
 
 sudo docker pull dustnic82/nginx-test
 sudo docker run -d -p 80:80 dustnic82/nginx-test
+
+#apt-get install -y traceroute
 ```
+
+This machine is running a docker image that implements a web server. With few commands we can set this up:
+
+The first two lines after "#web server configuration" are used to install Docker. With "sudo docker pull dustnic82/nginx-test" we download the docker image from the docker repository and with "sudo docker run -d -p 80:80 dustnic82/nginx-test" we run this image, the option -d and -p are respectively used for running the container in background and we are mapping the port number 80 of the container to the same port number on our localhost.
+
 
 ### switch
 
