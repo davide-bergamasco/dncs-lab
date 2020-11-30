@@ -264,13 +264,22 @@ end
 
 ```
 export DEBIAN_FRONTEND=noninteractive
-
 echo "hosta.sh script" > hosta
 
-sudo ip route add 192.168.100.0/30 via 192.168.10.1 dev enp0s8 #rotta per "broadcast_router-inter"
-sudo ip route add 192.168.20.0/23 via 192.168.10.1 dev enp0s8 #rotta per "broadcast_host_b"
-sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "broadcast_router-south-2"
+sudo ip route add 192.168.100.0/30 via 192.168.10.1 dev enp0s8 #rotta per "Subnet D"
+sudo ip route add 192.168.20.0/23 via 192.168.10.1 dev enp0s8 #rotta per "Subnet B"
+sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "Subnet C"
 ```
+
+The first command is common for all the scripts, it simply activates the "non interactive" mode. You use this mode when you need zero interaction while installing via apt (It accepts the default answer for all questions).
+The second line is also contained in every startup script, it creates a file with the name of the script. This is useful when all the machine are running because we can check that each machine has execute the correct script.
+The last three line are used to add the routes for the various subnets. The syntax is used is this:
+
+sudo ip route add NET_ADDRESS via NEXT_HOP_ADDRESS dev INTERFACE_NAME
+
+The reach all the machine that are in the subnet with "NET_ADDRESS" I have to send the packets towards the IP "NEXT_HOP_ADDRESS" throught the network interface called "INTERFACE_NAME" of my machine.
+
+
 
 ### host-b
 
@@ -299,13 +308,11 @@ sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "broadc
 
 ```
 export DEBIAN_FRONTEND=noninteractive
-
-
 echo "hostb.sh script" > hostb
 
-sudo ip route add 192.168.100.0/30 via 192.168.20.1 dev enp0s8 #rotta per "broadcast_router-inter"
-sudo ip route add 192.168.10.0/26 via 192.168.20.1 dev enp0s8 #rotta per "broadcast_host_a"
-sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "broadcast_router-south-2"
+sudo ip route add 192.168.100.0/30 via 192.168.20.1 dev enp0s8 #rotta per "Subnet D"
+sudo ip route add 192.168.10.0/25 via 192.168.20.1 dev enp0s8 #rotta per "Subnet A"
+sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "Subnet C"
 
 ```
 
@@ -336,13 +343,11 @@ sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "broadc
 
 ```
 export DEBIAN_FRONTEND=noninteractive
-
-
 echo "hostc.sh script" > hostc
 
-sudo ip route add 192.168.100.0/30 via 192.168.30.1 dev enp0s8 #rotta per rete "broadcast_router-inter"
-sudo ip route add 192.168.10.0/26 via 192.168.30.1 dev enp0s8 #rotta per rete "broadcast_host_a"
-sudo ip route add 192.168.20.0/23 via 192.168.30.1 dev enp0s8 #rotta per rete "broadcast_host_b"
+sudo ip route add 192.168.100.0/30 via 192.168.30.1 dev enp0s8 #rotta per rete "Subnet D"
+sudo ip route add 192.168.10.0/25 via 192.168.30.1 dev enp0s8 #rotta per rete "Subnet A"
+sudo ip route add 192.168.20.0/23 via 192.168.30.1 dev enp0s8 #rotta per rete "Subnet B"
 
 #web server configuration
 
@@ -350,18 +355,6 @@ apt-get update
 apt-get install -y docker.io
 apt-get install -y traceroute
 
-echo "<h1>This is the WebServer home page</h1>
-<h3>This page is hosted on host-c</h3>" > index.html
-
-echo "
-FROM nginx:latest
-MAINTAINER Davide
-ADD ./index.html /usr/share/nginx/html/index.html
-EXPOSE 80
-"> Dockerfile
-
-# sudo docker build -t my_dncs_webserver .
-# sudo docker run -d -p 80:80 my_dncs_webserver
 sudo docker pull dustnic82/nginx-test
 sudo docker run -d -p 80:80 dustnic82/nginx-test
 ```
@@ -402,8 +395,6 @@ end
 
 ```
 export DEBIAN_FRONTEND=noninteractive
-
-
 echo "switch.sh script" > switch
 
 apt-get update
@@ -452,8 +443,6 @@ end
 
 ```
 export DEBIAN_FRONTEND=noninteractive
-
-
 echo "router1.sh script" > router1
 
 sudo echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -463,13 +452,13 @@ ip link set enp0s8 up
 ip link add link enp0s8 name enp0s8.10 type vlan id 10
 ip link add link enp0s8 name enp0s8.20 type vlan id 20
 
-ip addr add 192.168.10.1/26 brd 192.168.10.63 dev enp0s8.10
+ip addr add 192.168.10.1/25 brd 192.168.10.63 dev enp0s8.10
 ip addr add 192.168.20.1/23 brd 192.168.21.255 dev enp0s8.20
 
 ip link set dev enp0s8.10 up
 ip link set dev enp0s8.20 up
 
-sudo ip route add 192.168.30.0/24 via 192.168.100.2 dev enp0s9 #rotta per rete "broadcast_router-south-2"
+sudo ip route add 192.168.30.0/24 via 192.168.100.2 dev enp0s9 #rotta per rete "Subnet C"
 
 ```
 
@@ -506,13 +495,11 @@ end
 
 ```
 export DEBIAN_FRONTEND=noninteractive
-
-
 echo "router2.sh script" > router2
 
 sudo echo 1 > /proc/sys/net/ipv4/ip_forward
 
-sudo ip route add 192.168.10.0/26 via 192.168.100.1 dev enp0s8 #rotta per "broadcast_host_a"
-sudo ip route add 192.168.20.0/23 via 192.168.100.1 dev enp0s8 #rotta per "broadcast_host_b"
+sudo ip route add 192.168.10.0/25 via 192.168.100.1 dev enp0s8 #rotta per "Subnet A"
+sudo ip route add 192.168.20.0/23 via 192.168.100.1 dev enp0s8 #rotta per "Subnet B"
 
 ```
