@@ -281,7 +281,7 @@ The last three line are used to add the routes for the various subnets. The synt
 
 sudo ip route add NET_ADDRESS via NEXT_HOP_ADDRESS dev INTERFACE_NAME
 
-The reach all the machine that are in the subnet with "NET_ADDRESS" I have to send the packets towards the IP "NEXT_HOP_ADDRESS" throught the network interface called "INTERFACE_NAME" of my machine.
+The reach all the machine that are in the subnet with "NET_ADDRESS" I have to send the packets towards the IP "NEXT_HOP_ADDRESS" through the network interface called "INTERFACE_NAME" of my machine.
 
 
 
@@ -426,10 +426,10 @@ ovs-vsctl add-port mybridge enp0s9 tag=10
 ovs-vsctl add-port mybridge enp0s10 tag=20
 ```
 
-The switch configuration is different from the others. This because the switch is the only machine (in the lab) that does not work over the layer 2 of TCP/IP stack, so it has three network interfaces without IP address.
+The switch configuration is different from the others. This because the switch is the only machine (in the lab) that does not work above the layer 2 of TCP/IP stack, so it's network interfaces don't have an IP address.
 The interface `enp0s8` (which is connected to the virtualbox__intnet `broadcast_router-south-1` as the `router-1`) is setted in the TRUNK mode. It means that packets from every VLANs can be carried from this port.
 The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be maneged from another port with different VLAN tag.
-
+In this way the broadcast domain it's divided in two, and all the machine that belong to the `Subnet_A` can reach the `Subnet_B` only through the `router-1`.If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` or `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running.
 
 ### router-1
 
