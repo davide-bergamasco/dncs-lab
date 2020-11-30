@@ -233,7 +233,7 @@ In the case of `Subnet-A` it was also possible to use a /26 (255.255.255.192) ne
 For all the other networks this issue does not occur.
 
 
-## Virtual machine configuration
+## Virtual machines configurations
 
 Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script called `$machinename.sh`
 
@@ -268,7 +268,7 @@ The creation and configuration of network interface is done in the Vagrantfile. 
 export DEBIAN_FRONTEND=noninteractive
 echo "hosta.sh script" > hosta
 
-sudo ip route add 192.168.100.0/30 via 192.168.10.1 dev enp0s8 #rotta per "Subnet D"
+#sudo ip route add 192.168.100.0/30 via 192.168.10.1 dev enp0s8 #rotta per "Subnet D"
 sudo ip route add 192.168.20.0/23 via 192.168.10.1 dev enp0s8 #rotta per "Subnet B"
 sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "Subnet C"
 ```
@@ -316,7 +316,7 @@ The configuration of this machine is the same of `host-a` with a different IP ad
 export DEBIAN_FRONTEND=noninteractive
 echo "hostb.sh script" > hostb
 
-sudo ip route add 192.168.100.0/30 via 192.168.20.1 dev enp0s8 #rotta per "Subnet D"
+#sudo ip route add 192.168.100.0/30 via 192.168.20.1 dev enp0s8 #rotta per "Subnet D"
 sudo ip route add 192.168.10.0/25 via 192.168.20.1 dev enp0s8 #rotta per "Subnet A"
 sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "Subnet C"
 
@@ -431,6 +431,51 @@ The interface `enp0s8` (which is connected to the virtualbox__intnet `broadcast_
 The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be maneged from another port with different VLAN tag.
 In this way the broadcast domain it's divided in two, and all the machine that belong to the `Subnet_A` can reach the `Subnet_B` only through the `router-1`.If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` or `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running.
 
+### router-2
+
+- `Vagrantfile`
+
+```
+#router2:
+config.vm.define "router-2" do |router2|
+  router2.vm.box = "ubuntu/bionic64"
+  router2.vm.hostname = "router-2"
+  router2.vm.provision "shell", path: "router2.sh"
+
+  #enp0s8
+  router2.vm.network "private_network",
+  virtualbox__intnet: "broadcast_router-inter",
+  ip: "192.168.100.2",
+  mask: "255.255.255.252"
+
+  #enp0s9
+  router2.vm.network "private_network",
+  virtualbox__intnet: "broadcast_router-south-2",
+  ip: "192.168.30.1",
+  mask: "255.255.255.0"
+
+  router2.vm.provider "virtualbox" do |vb|
+    vb.memory = 500
+  end
+end
+```
+
+- `router2.sh`
+
+```
+export DEBIAN_FRONTEND=noninteractive
+echo "router2.sh script" > router2
+
+sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+
+sudo ip route add 192.168.10.0/25 via 192.168.100.1 dev enp0s8 #rotta per "Subnet A"
+sudo ip route add 192.168.20.0/23 via 192.168.100.1 dev enp0s8 #rotta per "Subnet B"
+
+```
+This router has two network interfaces that are configered in the `Vagrantfile`. In the `router1.sh` script with the command `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` it's enabled the ipv4 forwarding which by default it's disabled. With the last two lines of the script we add the route for the `Subnet_A` and `Subnet_B`. The route to the subnet in which the router already have an inteface in are setted by default.
+
+
+
 ### router-1
 
 - `Vagrantfile`
@@ -479,47 +524,5 @@ ip link set dev enp0s8.10 up
 ip link set dev enp0s8.20 up
 
 sudo ip route add 192.168.30.0/24 via 192.168.100.2 dev enp0s9 #rotta per rete "Subnet C"
-
-```
-
-### router-2
-
-- `Vagrantfile`
-
-```
-#router2:
-config.vm.define "router-2" do |router2|
-  router2.vm.box = "ubuntu/bionic64"
-  router2.vm.hostname = "router-2"
-  router2.vm.provision "shell", path: "router2.sh"
-
-  #enp0s8
-  router2.vm.network "private_network",
-  virtualbox__intnet: "broadcast_router-inter",
-  ip: "192.168.100.2",
-  mask: "255.255.255.252"
-
-  #enp0s9
-  router2.vm.network "private_network",
-  virtualbox__intnet: "broadcast_router-south-2",
-  ip: "192.168.30.1",
-  mask: "255.255.255.0"
-
-  router2.vm.provider "virtualbox" do |vb|
-    vb.memory = 500
-  end
-end
-```
-
-- `router2.sh`
-
-```
-export DEBIAN_FRONTEND=noninteractive
-echo "router2.sh script" > router2
-
-sudo echo 1 > /proc/sys/net/ipv4/ip_forward
-
-sudo ip route add 192.168.10.0/25 via 192.168.100.1 dev enp0s8 #rotta per "Subnet A"
-sudo ip route add 192.168.20.0/23 via 192.168.100.1 dev enp0s8 #rotta per "Subnet B"
 
 ```
