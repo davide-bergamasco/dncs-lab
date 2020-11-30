@@ -120,7 +120,7 @@ The assignment deliverable consists of a Github repository containing:
 
 ## Network Topology
 
-Here you can see the basic network topology of the virtual lab. A more detalied version of this topology is avaiable on this repository (check out the `Network-Topology.png` file).
+Here you can see the basic network topology of the virtual lab. A more detalied version of this topology is available on this repository (check out the `Network-Topology.png` file).
 
 ```
 
@@ -168,7 +168,7 @@ Here you can see the basic network topology of the virtual lab. A more detalied 
 
 ## Network specifications
 
-This virtual lab contains four different subnets that are needed for accomplish the design requirements:
+This virtual lab contains four different subnets that are needed to accomplish the design requirements:
 
 
 - Subnet-A : 192.168.10.0/25
@@ -229,7 +229,7 @@ This virtual lab contains four different subnets that are needed for accomplish 
 
 Each of these subnets contains different hosts and different router's network interfaces. The lenght of the various netmasks depends on the number of usable addresses needed in each subnet.
 
-In the case of `Subnet-A` it was also possible to use a /26 (255.255.255.192) netmask , which has 62 usable addresses as required. Instead of the /26 I preferred to choose a /25 (255.255.255.127) netmask which as more free addresses. This because one of the address must be used for the router's network interface, so with the /26 netmask only 61 IP addresses were free to use meanwhile with the /25 we still have 125 free IP addresses.
+In the case of `Subnet-A` it was also possible to use a /26 (255.255.255.192) netmask ,which would have the required 62 usable addresses . Instead of the /26 I preferred to choose a /25 (255.255.255.127) netmask which as more free addresses. This because one of the address must be used for the router's network interface, so with the /26 netmask only 61 IP addresses were free to use meanwhile with the /25 we still have 125 free IP addresses.
 For all the other networks this issue does not occur.
 
 
