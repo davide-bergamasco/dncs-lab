@@ -371,7 +371,7 @@ sudo docker run -d -p 80:80 dustnic82/nginx-test
 
 This machine is running a docker image that implements a web server. With few commands we can set this up:
 
-The first two lines after `#web server configuration` are used to install Docker. With `sudo docker pull dustnic82/nginx-test` we download the docker image from the docker repository and with `sudo docker run -d -p 80:80 dustnic82/nginx-test` we run this image, the option -d and -p are respectively used for running the container in background and we are mapping the port number 80 of the container to the same port number on our localhost.
+The first two lines after `#web server configuration` are used to install Docker. With `sudo docker pull dustnic82/nginx-test` we download the docker image from the docker repository and with `sudo docker run -d -p 80:80 dustnic82/nginx-test` we run this image, the option -d and -p are respectively used for running the container in background and mapping the port number 80 of the container to the same port number on our localhost.
 
 
 ### switch
@@ -425,6 +425,11 @@ ovs-vsctl add-port mybridge enp0s8
 ovs-vsctl add-port mybridge enp0s9 tag=10
 ovs-vsctl add-port mybridge enp0s10 tag=20
 ```
+
+The switch configuration is different from the others. This because the switch is the only machine (in the lab) that does not work over the layer 2 of TCP/IP stack, so it has three network interfaces without IP address.
+The interface `enp0s8` (which is connected to the virtualbox__intnet `broadcast_router-south-1` as the `router-1`) is setted in the TRUNK mode. It means that packets from every VLANs can be carried from this port.
+The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be maneged from another port with different VLAN tag.
+
 
 ### router-1
 
