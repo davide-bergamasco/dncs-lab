@@ -229,13 +229,13 @@ This virtual lab contains four different subnets that are needed to accomplish t
 
 Each of these subnets contains different hosts and different router's network interfaces. The lenght of the various netmasks depends on the number of usable addresses needed in each subnet.
 
-In the case of `Subnet-A` it was also possible to use a /26 (255.255.255.192) netmask ,which would have the required 62 usable addresses . Instead of the /26 I preferred to choose a /25 (255.255.255.127) netmask which as more free addresses. This because one of the address must be used for the router's network interface, so with the /26 netmask only 61 IP addresses were free to use meanwhile with the /25 we still have 125 free IP addresses.
+In the case of `Subnet-A` it was also possible to use a /26 (255.255.255.192) netmask, which would have the required 62 usable addresses. Instead of the /26 I preferred choosing a /25 (255.255.255.127) netmask which has more free addresses. This is because one of the addresses must be used for the router's network interface. so with the /26 netmask only 61 IP addresses were free to use meanwhile with the /25 we still have 125 free IP addresses.
 For all the other networks this issue does not occur.
 
 
 ## Virtual machines configurations
 
-Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script called `$machinename.sh`
+Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script called `$machinename.sh`.
 
 ### host-a
 
