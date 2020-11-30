@@ -235,7 +235,7 @@ For all the other networks this issue does not occur.
 
 ## Virtual machines configurations
 
-Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script called `$machinename.sh`.
+Every machine's configuration is implemented with the `Vagrantfile` and a machine specific startup script called `$machinename.sh`
 
 ### host-a
 
@@ -260,7 +260,7 @@ config.vm.define "host-a" do |hosta|
 end
 ```
 
-The creation and configuration of network interface is done in the Vagrantfile. It's defined a static private IP address with it's own netmask address.
+The creation and configuration of the network interface is done in the Vagrantfile. A static private IP address it's defined with its own netmask address.
 
 - `hosta.sh`
 
@@ -276,12 +276,12 @@ sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "Subnet
 
 
 The first command is common for all the scripts, it simply activates the "non interactive" mode. You use this mode when you need zero interaction while installing via apt (It accepts the default answer for all questions).
-The second line is also contained in every startup script, it creates a file with the name of the script. This is useful when all the machine are running because we can check that each machine has execute the correct script.
-The last three line are used to add the routes for the various subnets. The syntax is used is this:
+The second line is also contained in every startup script, it creates a file with the name of the script. This is useful when all the machine are running because we can check that each machine has executed the correct script.
+The last three lines are used to add the routes for the various subnets. The used syntax is :
 
 sudo ip route add NET_ADDRESS via NEXT_HOP_ADDRESS dev INTERFACE_NAME
 
-The reach all the machine that are in the subnet with "NET_ADDRESS" I have to send the packets towards the IP "NEXT_HOP_ADDRESS" through the network interface called "INTERFACE_NAME" of my machine.
+To reach all the machine that are in the subnet with "NET_ADDRESS" I have to send the packets towards the IP "NEXT_HOP_ADDRESS" through the network interface called "INTERFACE_NAME" of my machine.
 
 
 
