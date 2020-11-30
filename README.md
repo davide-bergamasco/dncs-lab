@@ -260,6 +260,8 @@ config.vm.define "host-a" do |hosta|
 end
 ```
 
+The creation and configuration of network interface is done in the Vagrantfile. It's defined a static private IP address with it's own netmask address.
+
 - `hosta.sh`
 
 ```
@@ -270,6 +272,8 @@ sudo ip route add 192.168.100.0/30 via 192.168.10.1 dev enp0s8 #rotta per "Subne
 sudo ip route add 192.168.20.0/23 via 192.168.10.1 dev enp0s8 #rotta per "Subnet B"
 sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "Subnet C"
 ```
+
+
 
 The first command is common for all the scripts, it simply activates the "non interactive" mode. You use this mode when you need zero interaction while installing via apt (It accepts the default answer for all questions).
 The second line is also contained in every startup script, it creates a file with the name of the script. This is useful when all the machine are running because we can check that each machine has execute the correct script.
