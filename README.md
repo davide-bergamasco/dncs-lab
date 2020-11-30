@@ -281,7 +281,7 @@ The last three lines are used to add the routes for the various subnets. The use
 
 sudo ip route add NET_ADDRESS via NEXT_HOP_ADDRESS dev INTERFACE_NAME
 
-To reach all the machine that are in the subnet with "NET_ADDRESS" I have to send the packets towards the IP "NEXT_HOP_ADDRESS" through the network interface called "INTERFACE_NAME" of my machine.
+To reach all the machines that are in the subnet with "NET_ADDRESS" you have to send the packets through the network interface called "INTERFACE_NAME" of the machine towards the IP "NEXT_HOP_ADDRESS" .
 
 
 
