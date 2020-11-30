@@ -287,6 +287,8 @@ The reach all the machine that are in the subnet with "NET_ADDRESS" I have to se
 
 ### host-b
 
+The configuration of this machine is the same of `host-a` with a different IP address.
+
 - `Vagrantfile`
 
 ```
