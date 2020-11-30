@@ -371,7 +371,7 @@ sudo docker run -d -p 80:80 dustnic82/nginx-test
 
 This machine is running a docker image that implements a web server. With few commands we can set this up:
 
-The first two lines after "#web server configuration" are used to install Docker. With "sudo docker pull dustnic82/nginx-test" we download the docker image from the docker repository and with "sudo docker run -d -p 80:80 dustnic82/nginx-test" we run this image, the option -d and -p are respectively used for running the container in background and we are mapping the port number 80 of the container to the same port number on our localhost.
+The first two lines after `#web server configuration` are used to install Docker. With `sudo docker pull dustnic82/nginx-test` we download the docker image from the docker repository and with `sudo docker run -d -p 80:80 dustnic82/nginx-test` we run this image, the option -d and -p are respectively used for running the container in background and we are mapping the port number 80 of the container to the same port number on our localhost.
 
 
 ### switch
