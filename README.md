@@ -528,7 +528,7 @@ sudo ip route add 192.168.30.0/24 via 192.168.100.2 dev enp0s9 #rotta per rete "
 ```
 
 In this router the interface `enp0s8` has a complex structure because it has to manage the VLANs tags coming from the Switch.So practically this interface is treated as if they were two different, with different names, different VLANs tags and different IP addresses. All this is done in the `router1.sh` script together with some other operation like enabling the IPV4 forwarding and adding the route for the `Subnet_C`.
-The `enp0s9` interface is configered in the `Vagrantfile`.
+The `enp0s9` interface is configured in the `Vagrantfile`.
 
 
-## Some tests and Conclusion
+## Tests and Conclusions

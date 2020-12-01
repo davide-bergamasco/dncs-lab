@@ -9,7 +9,7 @@ sudo ip route add 192.168.20.0/23 via 192.168.30.1 dev enp0s8 #rotta per rete "S
 
 apt-get update
 apt-get install -y docker.io
-# apt-get install  traceroute
+# apt-get install -y traceroute
 
 # echo "<h1>This is the WebServer home page</h1>
 # <h3>This page is hosted on host-c</h3>" > index.html
