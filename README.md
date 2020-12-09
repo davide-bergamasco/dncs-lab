@@ -120,7 +120,7 @@ The assignment deliverable consists of a Github repository containing:
 
 ## Network Topology
 
-Here you can see the basic network topology of the virtual lab. A more detalied version of this topology is available on this repository (check out the `Network-Topology.png` file).
+Here you can see the basic network topology of the virtual lab. A more detalied version of this topology is available on this repository (check out the `./images/Network-Topology.png` file).
 
 ```
 
@@ -534,4 +534,11 @@ The `enp0s9` interface is configured in the `Vagrantfile`.
 
 ## Tests and Conclusions
 
-If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` and `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running.
+In some previous version of the lab all the "ip route" commands in the various scripts were uncommented, now only the fondamentals one are working.
+
+The first thing that need to be checked is the network configuration of the machines, for this it's used `ifconfig`:
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/wget.png)
+
+`host-c` is reachable from `host-a` and `host-b`(and viceversa). This could be done with the `ping`  commands.  
+
+<!-- If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` and `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running. -->
