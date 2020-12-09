@@ -536,7 +536,7 @@ The `enp0s9` interface is configured in the `Vagrantfile`.
 
 In some previous version of the lab all the "ip route" commands in the various scripts were uncommented, now only the fondamentals one are working.
 
-The first thing that need to be checked is the network configuration of the machines, for this it's used `ifconfig`:
+The first thing that need to be checked is the network configuration of the machines(correct ip and netmask on every interfaces), for this it's used `ifconfig`:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/ifconfig.png)
@@ -546,6 +546,21 @@ After that it's verified that `host-c` is reachable from `host-a` and `host-b`(a
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/ping.png)
+
+
+It's checked that the docker web server on `host-c` is working correctly.
+
+
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/docker.png)
+
+
+Finally `host-a` and `host-b` try to connect to the WebServer of `host-c`.
+
+
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/wget.png)
+
+
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/curl.png)
 
 
 <!-- If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` and `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running. -->
