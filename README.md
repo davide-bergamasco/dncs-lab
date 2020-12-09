@@ -536,7 +536,7 @@ The `enp0s9` interface is configured in the `Vagrantfile`.
 
 In some previous version of the lab all the "ip route" commands in the various scripts were uncommented, now only the fondamentals one are working.
 
-The first thing that need to be checked is the network configuration of the machines(correct ip and netmask on every interfaces), for this it's used `ifconfig`:
+The first thing that need to be checked is the network configuration of the machines(correct ip and netmask on every interface), for this it's used `ifconfig`: (it's shown the result of the command only on `host-b` but it's possible to do the same also on the others machines)
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/ifconfig.png)
@@ -558,6 +558,9 @@ Finally `host-a` and `host-b` try to connect to the WebServer of `host-c`.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/wget.png)
+
+
+With `cat index.html` it's show what'is written in the recived file. Or directly with `curl 192.168.3.2`:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/curl.png)
