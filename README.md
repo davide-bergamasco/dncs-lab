@@ -536,13 +536,13 @@ The `enp0s9` interface is configured in the `Vagrantfile`.
 
 In some previous version of the lab all the "ip route" commands in the various scripts were uncommented, now only the fondamentals one are working.
 
-The first thing that need to be checked is the network configuration of the machines(correct ip and netmask on every interface), for this it's used `ifconfig`: (it's shown the result of the command on `host-b` but it's possible to do the same on all the machines)
+The first thing that need to be checked is the correctness of the network configuration of the machines(ip and netmask on every interface), for this it's used `ifconfig`: (it's shown the result of the command on `host-b` but it's possible to do the same on all the machines)
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfig.png)
 
 
-Same command on router1 to see if the interfaces with VLANs tag are properly configured:
+Same command on router1 to see if the interfaces that have to manage VLANs tag are properly configured:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfigrouter.png)
@@ -554,7 +554,7 @@ After that it's verified that `host-c` is reachable from `host-a` and `host-b`(a
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ping.png)
 
 
-With the same command it' possible to see that `host-a` and `host-b` do not reach each others.
+With the same command it's possible to see that `host-a` and `host-b` do not reach each others.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/pingfailure.png)
@@ -572,7 +572,7 @@ Finally `host-a` and `host-b` try to connect to the WebServer of `host-c`.
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/wget.png)
 
 
-With `cat index.html` it's possible to show what is written in the recived file. Or directly get it with `curl 192.168.3.2`:
+With `cat index.html` it's possible to show what is written in the recived file. Or directly with `curl 192.168.3.2`:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/curl.png)
