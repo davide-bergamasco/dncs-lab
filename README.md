@@ -542,7 +542,7 @@ The first thing that need to be checked is the network configuration of the mach
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfig.png)
 
 
-Same command on router1 to see if the VLANs are properly configured:
+Same command on router1 to see if the interfaces with VLANs tag are properly configured:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfigrouter.png)
@@ -554,7 +554,7 @@ After that it's verified that `host-c` is reachable from `host-a` and `host-b`(a
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ping.png)
 
 
-With the same command it' possible to see that `host-a` and `host-b` reach each others.
+With the same command it' possible to see that `host-a` and `host-b` do not reach each others.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/pingfailure.png)
@@ -576,7 +576,3 @@ With `cat index.html` it's possible to show what is written in the recived file.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/curl.png)
-
-
-
-
