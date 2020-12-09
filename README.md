@@ -269,7 +269,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo "hosta.sh script" > hosta
 
 #sudo ip route add 192.168.100.0/30 via 192.168.10.1 dev enp0s8 #rotta per "Subnet D"
-sudo ip route add 192.168.20.0/23 via 192.168.10.1 dev enp0s8 #rotta per "Subnet B"
+#sudo ip route add 192.168.20.0/23 via 192.168.10.1 dev enp0s8 #rotta per "Subnet B"
 sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "Subnet C"
 ```
 
@@ -317,7 +317,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo "hostb.sh script" > hostb
 
 #sudo ip route add 192.168.100.0/30 via 192.168.20.1 dev enp0s8 #rotta per "Subnet D"
-sudo ip route add 192.168.10.0/25 via 192.168.20.1 dev enp0s8 #rotta per "Subnet A"
+#sudo ip route add 192.168.10.0/25 via 192.168.20.1 dev enp0s8 #rotta per "Subnet A"
 sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "Subnet C"
 
 ```
@@ -428,8 +428,9 @@ ovs-vsctl add-port mybridge enp0s10 tag=20
 
 The switch configuration is different from the others. This because the switch is the only machine (in the lab) that does not work above the layer 2 of TCP/IP stack, so its network interfaces don't have an IP address.
 The interface `enp0s8` (which is connected to the virtualbox__intnet `broadcast_router-south-1` as the `router-1`) is setted in the TRUNK mode. It means that packets from every VLANs can be carried from this port.
-The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be maneged from the another port because they have different VLANs tags.
-In this way the broadcast domain it's divided in two, and all the machine that belong to the `Subnet_A` can reach the `Subnet_B` only through the `router-1`.If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` and `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running.
+The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be managed from the another port because they have different VLANs tags.
+In this way the broadcast domain it's divided in two, and all the machine that belong to the `Subnet_A` can reach the `Subnet_B` only through the router-1 (If the routes are properly setted).
+<!-- If we want to completely separate the two networks it's sufficient to delete the specific ip route add... command from hosta.sh and hostb.sh before the vagrant up or entering sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8 on host-a and sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8on host-b while the machines are running. -->
 
 ### router-2
 
@@ -472,7 +473,7 @@ sudo ip route add 192.168.10.0/25 via 192.168.100.1 dev enp0s8 #rotta per "Subne
 sudo ip route add 192.168.20.0/23 via 192.168.100.1 dev enp0s8 #rotta per "Subnet B"
 
 ```
-This router has two network interfaces that are configered in the `Vagrantfile`. In the `router2.sh` script with the command `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` it's enabled the ipv4 forwarding which by default it's disabled. With the last two lines of the script it is added the route for the `Subnet_A` and `Subnet_B`. The route to the subnet in which the router already have an inteface in are setted by default.
+This router has two network interfaces that are configered in the `Vagrantfile`. In the `router2.sh` script with the command `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` it's enabled the IPV4 forwarding which by default it's disabled. With the last two lines of the script it is added the route for the `Subnet_A` and `Subnet_B`. The route to the subnet in which the router already have an inteface in are setted by default.
 
 
 
@@ -527,8 +528,10 @@ sudo ip route add 192.168.30.0/24 via 192.168.100.2 dev enp0s9 #rotta per rete "
 
 ```
 
-In this router the interface `enp0s8` has a complex structure because it has to manage the VLANs tags coming from the Switch.So practically this interface is treated as if they were two different, with different names, different VLANs tags and different IP addresses. All this is done in the `router1.sh` script together with some other operation like enabling the IPV4 forwarding and adding the route for the `Subnet_C`.
+In this router the interface `enp0s8` has a complex structure because it has to manage the VLANs tags coming from the Switch. So practically this interface is treated as if they were two different, with different names, different VLANs tags and different IP addresses. All this is done in the `router1.sh` script together with some other operation like enabling the IPV4 forwarding and adding the route for the `Subnet_C`.
 The `enp0s9` interface is configured in the `Vagrantfile`.
 
 
 ## Tests and Conclusions
+
+If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` and `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running.
