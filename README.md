@@ -576,3 +576,6 @@ With `cat index.html` it's possible to show what is written in the recived file.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/curl.png)
+
+
+Other more detailed test can be done installing various tools on the machines (like tcpdump or traceroute).
