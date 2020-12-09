@@ -536,34 +536,47 @@ The `enp0s9` interface is configured in the `Vagrantfile`.
 
 In some previous version of the lab all the "ip route" commands in the various scripts were uncommented, now only the fondamentals one are working.
 
-The first thing that need to be checked is the network configuration of the machines(correct ip and netmask on every interface), for this it's used `ifconfig`: (it's shown the result of the command only on `host-b` but it's possible to do the same also on the others machines)
+The first thing that need to be checked is the network configuration of the machines(correct ip and netmask on every interface), for this it's used `ifconfig`: (it's shown the result of the command on `host-b` but it's possible to do the same on all the machines)
 
 
-![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/ifconfig.png)
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfig.png)
+
+
+Same command on router1 to see if the VLANs are properly configured:
+
+
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfigrouter.png)
 
 
 After that it's verified that `host-c` is reachable from `host-a` and `host-b`(and viceversa). This could be done with the `ping` command:
 
 
-![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/ping.png)
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ping.png)
+
+
+With the same command it' possible to see that `host-a` and `host-b` reach each others.
+
+
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/pingfailure.png)
 
 
 It's checked that the docker web server on `host-c` is working correctly.
 
 
-![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/docker.png)
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/docker.png)
 
 
 Finally `host-a` and `host-b` try to connect to the WebServer of `host-c`.
 
 
-![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/wget.png)
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/wget.png)
 
 
-With `cat index.html` it's show what'is written in the recived file. Or directly with `curl 192.168.3.2`:
+With `cat index.html` it's possible to show what is written in the recived file. Or directly get it with `curl 192.168.3.2`:
 
 
-![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/curl.png)
+![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/curl.png)
 
 
-<!-- If we want to completely separate the two networks it's sufficient to delete the specific `ip route add...` command from `hosta.sh` and `hostb.sh` before the `vagrant up` or entering `sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8` on `host-a` and `sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8`on `host-b` while the machines are running. -->
+
+
