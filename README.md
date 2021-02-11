@@ -428,7 +428,7 @@ ovs-vsctl add-port mybridge enp0s10 tag=20
 
 The switch configuration is different from the others. This because the switch is the only machine (in the lab) that does not work above the layer 2 of TCP/IP stack, so its network interfaces don't have an IP address.
 The interface `enp0s8` (which is connected to the virtualbox__intnet `broadcast_router-south-1` as the `router-1`) is setted in the TRUNK mode. It means that packets from every VLANs can be carried from this port.
-The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be managed from the another port because they have different VLANs tags.
+The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be managed from the other port because they have different VLANs tags.
 In this way the broadcast domain it's divided in two, and all the machine that belong to the `Subnet_A` can reach the `Subnet_B` only through the router-1 (If the routes are properly setted).
 <!-- If we want to completely separate the two networks it's sufficient to delete the specific ip route add... command from hosta.sh and hostb.sh before the vagrant up or entering sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8 on host-a and sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8on host-b while the machines are running. -->
 
