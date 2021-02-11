@@ -227,7 +227,7 @@ This virtual lab contains four different subnets that are needed to accomplish t
 
 ```
 
-Each of these subnets contains different hosts and different router's network interfaces. The lenght of the various netmasks depends on the number of usable addresses needed in each subnet.
+Each of these subnets contains different hosts' and different routers' network interfaces. The lenght of the various netmasks depends on the number of usable addresses needed in each subnet.
 
 In the case of `Subnet-A` it was also possible to use a /26 (255.255.255.192) netmask, which would have the required 62 usable addresses. Instead of the /26 I preferred choosing a /25 (255.255.255.127) netmask which has more free addresses. This is because one of the addresses must be used for the router's network interface. so with the /26 netmask only 61 IP addresses were free to use meanwhile with the /25 we still have 125 free IP addresses.
 For all the other networks this issue does not occur.
@@ -260,7 +260,7 @@ config.vm.define "host-a" do |hosta|
 end
 ```
 
-The creation and configuration of the network interface is done in the Vagrantfile. A static private IP address it's defined with its own netmask address.
+The creation and configuration of the network interface is done in the Vagrantfile. A static private IP address is defined with its own netmask address.
 
 - `hosta.sh`
 
@@ -276,7 +276,7 @@ sudo ip route add 192.168.30.0/24 via 192.168.10.1 dev enp0s8 #rotta per "Subnet
 
 
 The first command is common for all the scripts, it simply activates the "non interactive" mode. You use this mode when you need zero interaction while installing via apt (It accepts the default answer for all questions).
-The second line is also contained in every startup script, it creates a file with the name of the script. This is useful when all the machine are running because we can check that each machine has executed the correct script.
+The second line is also contained in every startup script, it creates a file with the name of the script. This is useful when all the machines are running because we can check that each machine has executed the correct script.
 The last three lines are used to add the routes for the various subnets. The used syntax is :
 
 sudo ip route add NET_ADDRESS via NEXT_HOP_ADDRESS dev INTERFACE_NAME
@@ -324,7 +324,7 @@ sudo ip route add 192.168.30.0/24 via 192.168.20.1 dev enp0s8 #rotta per "Subnet
 
 ### host-c
 
-The network configuration of this machine very similar to the configuration of `host-a` and `host-b`.
+The network configuration of this machine is very similar to the configuration of `host-a` and `host-b`.
 
 
 - `Vagrantfile`
@@ -369,9 +369,9 @@ sudo docker run -d -p 80:80 dustnic82/nginx-test
 #apt-get install -y traceroute
 ```
 
-On this machine is also running a docker image that implements a web server. With few commands we can set this up:
+On this machine a docker image that implements a web server is also running. With few commands we can set this up:
 
-The first two lines after `#web server configuration` are used to install Docker. With `sudo docker pull dustnic82/nginx-test` we download the docker image from the docker repository and with `sudo docker run -d -p 80:80 dustnic82/nginx-test` we run this image, the option -d and -p are respectively used for running the container in background and mapping the port number 80 of the container to the same port number on our localhost.
+The first two lines after `#web server configuration` are used to install Docker. With `sudo docker pull dustnic82/nginx-test` we download the docker image from the docker repository and with `sudo docker run -d -p 80:80 dustnic82/nginx-test` we run this image. The options -d and -p are respectively used for running the container in background, and mapping the port number 80 of the container to the same port number on our localhost.
 
 
 ### switch
@@ -426,10 +426,10 @@ ovs-vsctl add-port mybridge enp0s9 tag=10
 ovs-vsctl add-port mybridge enp0s10 tag=20
 ```
 
-The switch configuration is different from the others. This because the switch is the only machine (in the lab) that does not work above the layer 2 of TCP/IP stack, so its network interfaces don't have an IP address.
-The interface `enp0s8` (which is connected to the virtualbox__intnet `broadcast_router-south-1` as the `router-1`) is setted in the TRUNK mode. It means that packets from every VLANs can be carried from this port.
-The interfaces `enp0s9` and `enp0s10` are setted in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports can not be managed from the other port because they have different VLANs tags.
-In this way the broadcast domain it's divided in two, and all the machine that belong to the `Subnet_A` can reach the `Subnet_B` only through the router-1 (If the routes are properly setted).
+The switch configuration is different from the others. This is because the switch is the only machine (in the lab) that does not work above the layer 2 of TCP/IP stack, so its network interfaces do not have an IP address.
+The interface `enp0s8` (which is connected to the virtualbox__intnet `broadcast_router-south-1` as the `router-1`) is set in the TRUNK mode. It means that packets from every VLANs can be carried from this port.
+The interfaces `enp0s9` and `enp0s10` are set in the ACCESS mode on two different VLANs, so the traffic coming from one of these ports cannot be managed from the other port because they have different VLANs tags.
+In this way the broadcast domain is divided in two, and all the machines which belong to the `Subnet_A` can reach the `Subnet_B` only through the router-1 (If the routes are set properly).
 <!-- If we want to completely separate the two networks it's sufficient to delete the specific ip route add... command from hosta.sh and hostb.sh before the vagrant up or entering sudo ip route del 192.168.20.0/23 via 192.168.10.1 dev enp0s8 on host-a and sudo ip route del 192.168.10.0/25 via 192.168.20.1 dev enp0s8on host-b while the machines are running. -->
 
 ### router-2
@@ -473,7 +473,7 @@ sudo ip route add 192.168.10.0/25 via 192.168.100.1 dev enp0s8 #rotta per "Subne
 sudo ip route add 192.168.20.0/23 via 192.168.100.1 dev enp0s8 #rotta per "Subnet B"
 
 ```
-This router has two network interfaces that are configered in the `Vagrantfile`. In the `router2.sh` script with the command `sudo echo 1 > /proc/sys/net/ipv4/ip_forward` it's enabled the IPV4 forwarding which by default it's disabled. With the last two lines of the script it is added the route for the `Subnet_A` and `Subnet_B`. The route to the subnet in which the router already have an inteface in are setted by default.
+This router has two network interfaces that are configured in the `Vagrantfile`. The IPV4 forwarding (which by default is disabled) is enabled in the `router2.sh` script with the command `sudo echo 1 > /proc/sys/net/ipv4/ip_forward`. the route for the `Subnet_A` and `Subnet_B` is added with the last two lines of the script. The routes to the subnets in which the router already has an inteface are set by default.
 
 
 
@@ -528,54 +528,55 @@ sudo ip route add 192.168.30.0/24 via 192.168.100.2 dev enp0s9 #rotta per rete "
 
 ```
 
-In this router the interface `enp0s8` has a complex structure because it has to manage the VLANs tags coming from the Switch. So practically this interface is treated as if they were two different, with different names, different VLANs tags and different IP addresses. All this is done in the `router1.sh` script together with some other operation like enabling the IPV4 forwarding and adding the route for the `Subnet_C`.
+In this router the interface `enp0s8` has a complex structure because it has to manage the VLANs tags coming from the Switch. This means that this interface is treated as if it was two different ones, with different names, different VLANs tags and different IP addresses. This is all done in the `router1.sh` script together with some other operations like enabling the IPV4 forwarding and adding the route for the `Subnet_C`.
 The `enp0s9` interface is configured in the `Vagrantfile`.
 
 
 ## Tests and Conclusions
 
-In some previous version of the lab all the "ip route" commands in the various scripts were uncommented, now only the fondamentals one are working.
+In some previous versions of the lab all the "ip route" commands in the various scripts were uncommented, now only the fondamental ones are working.
 
-The first thing that need to be checked is the correctness of the network configuration of the machines(ip and netmask on every interface), for this it's used `ifconfig`: (it's shown the result of the command on `host-b` but it's possible to do the same on all the machines)
+The first thing that needs to be checked is the correctness of the machines' network configuration (ip and netmask on every interface). For this `ifconfig` is used.
+This is the result of the command on `host-b` but it's possible to do the same on each machine.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfig.png)
 
 
-Same command on router1 to see if the interfaces that have to manage VLANs tag are properly configured:
+We run the same command on router1 to see if the interfaces that have to manage VLANs tag are properly configured:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ifconfigrouter.png)
 
 
-After that it's verified that `host-c` is reachable from `host-a` and `host-b`(and viceversa). This could be done with the `ping` command:
+After that it is verified that `host-c` is reachable from `host-a` and `host-b`(and viceversa). This could be done with the `ping` command:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/ping.png)
 
 
-With the same command it's possible to see that `host-a` and `host-b` do not reach each others.
+With the same command it is possible to see that `host-a` and `host-b` do not reach each other.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/pingfailure.png)
 
 
-It's checked that the docker web server on `host-c` is working correctly.
+It is checked that the docker web server on `host-c` is working correctly.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/docker.png)
 
 
-Finally `host-a` and `host-b` try to connect to the WebServer of `host-c`.
+In the end `host-a` and `host-b` try to connect to the WebServer of `host-c`.
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/wget.png)
 
 
-With `cat index.html` it's possible to show what is written in the recived file. Or directly with `curl 192.168.3.2`:
+With `cat index.html` it is possible to show what is written in the recived file. Or directly with `curl 192.168.3.2`:
 
 
 ![Alt text](https://github.com/davide-bergamasco/dncs-lab/blob/master/images/curl.png)
 
 
-Other more detailed test can be done installing various tools on the machines (like tcpdump or traceroute).
+Other more detailed tests can be carried out by installing various tools on the machines (like tcpdump or traceroute).
