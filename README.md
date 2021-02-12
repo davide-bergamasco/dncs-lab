@@ -209,8 +209,8 @@ This virtual lab contains four different subnets that are needed to accomplish t
   CIDR Notation: /24
   RequiredAddresses: 143
   Number of Usable Hosts:	254
-  Usable Host IP Range: (192.168.20.1 - 192.168.21.254)
-  Broadcast Address: 192.168.21.255
+  Usable Host IP Range: (192.168.30.1 - 192.168.30.254)
+  Broadcast Address: 192.168.30.255
 
   ```
 
@@ -219,7 +219,7 @@ This virtual lab contains four different subnets that are needed to accomplish t
 ```
 
   SubnetAddress: 192.168.100.0
-  SubnetPrefixLength: 255.255.255.0
+  SubnetPrefixLength: 255.255.255.252
   CIDR Notation: /30
   Number of Usable Hosts:	2
   Usable Host IP Range: (192.168.100.1 - 192.168.100.2)
